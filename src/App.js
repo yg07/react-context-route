@@ -1,35 +1,41 @@
+import * as React from 'react'
 import { BrowserRouter as Router, Routes, Route, Outlet, Link } from "react-router-dom";
 
+const  MenuContext = React.createContext()
+
+
 export default function App() {
+
+  const [menuItem, setMenuItem] = React.useState(0);
+
+
   return (
     <div>
       <h1>Basic Example</h1>
 
       <p>
-        This example demonstrates some of the core features of React Router
-        including nested <code>&lt;Route&gt;</code>s,{" "}
-        <code>&lt;Outlet&gt;</code>s, <code>&lt;Link&gt;</code>s, and using a
-        "*" route (aka "splat route") to render a "not found" page when someone
-        visits an unrecognized URL.
+          <h3>menuItem = {menuItem}</h3>
       </p>
 
       {/* Routes nest inside one another. Nested route paths build upon
             parent route paths, and nested route elements render inside
             parent route elements. See the note about <Outlet> below. */}
-      <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="dashboard" element={<Dashboard />} />
+      <MenuContext.Provider value={{menuItem, setMenuItem}}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="about" element={<About />} />
+              <Route path="dashboard" element={<Dashboard />} />
 
-          {/* Using path="*"" means "match anything", so this route
-                acts like a catch-all for URLs that we don't have explicit
-                routes for. */}
-          <Route path="*" element={<NoMatch />} />
-        </Route>
-      </Routes>
-      </Router>
+              {/* Using path="*"" means "match anything", so this route
+                    acts like a catch-all for URLs that we don't have explicit
+                    routes for. */}
+              <Route path="*" element={<NoMatch />} />
+            </Route>
+          </Routes>
+        </Router>
+      </MenuContext.Provider>
     </div>
   );
 }
@@ -67,33 +73,52 @@ function Layout() {
 }
 
 function Home() {
+  const  {menuItem, setMenuItem} = React.useContext(MenuContext);
+  setMenuItem(1);
   return (
     <div>
       <h2>Home</h2>
+      <p>
+        <h5>menuItem = {menuItem}</h5>
+      </p>
     </div>
   );
 }
 
 function About() {
+  const  {menuItem, setMenuItem} = React.useContext(MenuContext);
+  setMenuItem(2);
   return (
     <div>
       <h2>About</h2>
+      <p>
+        <h5>menuItem = {menuItem}</h5>
+      </p>
     </div>
   );
 }
 
 function Dashboard() {
+  const  {menuItem, setMenuItem} = React.useContext(MenuContext);
   return (
     <div>
       <h2>Dashboard</h2>
+      <p>
+        <h5>menuItem = {menuItem}</h5>
+      </p>
     </div>
   );
 }
 
 function NoMatch() {
+  const  {menuItem, setMenuItem} = React.useContext(MenuContext);
   return (
     <div>
       <h2>Nothing to see here!</h2>
+      <h2>Dashboard</h2>
+      <p>
+        <h5>menuItem = {menuItem}</h5>
+      </p>
       <p>
         <Link to="/">Go to the home page</Link>
       </p>
